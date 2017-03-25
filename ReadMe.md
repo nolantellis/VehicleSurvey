@@ -10,12 +10,12 @@ Tools And Technology Used
 
 How to Run via JAVA
 -----------------
-java -jar VehicleSurvey-1.0-SNAPSHOT.jar <File Name>
+* java -jar VehicleSurvey-1.0-SNAPSHOT.jar <File Name>
 
-From Project Directory : Vehicle Survey
-java -jar target/VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
+* From Project Directory : Vehicle Survey
+* java -jar target/VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
 
-The file name can be full path or relative path.
+* The file name can be full path or relative path.
 
 Run Via Maven
 ----------------
@@ -23,13 +23,13 @@ Run Via Maven
 
 Command
 ----------
-mvn clean install
-The above command will also run the program after all tests are passed.
+* mvn clean install
+* The above command will also run the program after all tests are passed.
 
 Test Coverage Reports
 ----------------------
-For Test run 'mvn test'
-After running 'mvn clean install'. An index.html file is generated in target/site/jacoco directory. You can view the coverage report in the same.
+* For Test run 'mvn test'
+* After running 'mvn clean install'. An index.html file is generated in target/site/jacoco directory. You can view the coverage report in the same.
 
 Java API Docs for documentaion over classes and methods
 -------------
@@ -46,10 +46,10 @@ ASSUMPTIONS
 
 Important Classes with 1 line explaination
 -----------------------------------------
-VehicleStat - > Basic pojo which holds data of a vehicle . Data like average speed,average time.
-VehicleStatReport - > This is a class which builds a report based ona  list of VehicleStat.
-VehicleStatBuilder - > Main class which reads all points in a file and generate a list of Vehicle stats.
-HosePoint - > An instant when a vehicle passes the strip on the road.
+* VehicleStat - > Basic pojo which holds data of a vehicle . Data like average speed,average time.
+* VehicleStatReport - > This is a class which builds a report based ona  list of VehicleStat.
+* VehicleStatBuilder - > Main class which reads all points in a file and generate a list of Vehicle stats.
+* HosePoint - > An instant when a vehicle passes the strip on the road.
 
 Main Class
 ---------------------------------------
