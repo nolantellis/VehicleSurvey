@@ -38,8 +38,8 @@ Java API Docs for documentaion over classes and methods
 ASSUMPTIONS
 ---------------------------
 * Grouping by Minutes is considered to be in the same group by the hour.
-** Example first 20 minutes of hour 1 is considered to be in same group for 1st 20 minutes of next hour.
-** If that is not the case ,only 1 parameter needs to be changed to group by hours of day.
+* Example first 20 minutes of hour 1 is considered to be in same group for 1st 20 minutes of next hour.
+* If that is not the case ,only 1 parameter needs to be changed to group by hours of day.
 * Time of the vehicle passing the strip is considered average of time all the hosepoints of a car.
 * Average distance between cars are in meters.
 * All Reporting APIs are currently in 1 class for the given problem statement.
