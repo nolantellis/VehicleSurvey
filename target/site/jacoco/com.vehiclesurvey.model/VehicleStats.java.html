@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>VehicleStats.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">VehicleSurvey</a> &gt; <a href="index.source.html" class="el_package">com.vehiclesurvey.model</a> &gt; <span class="el_source">VehicleStats.java</span></div><h1>VehicleStats.java</h1><pre class="source lang-java linenums">package com.vehiclesurvey.model;
+
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+import com.vehiclesurvey.util.VehicleStatsBuilder;
+
+/**
+ * This is the main class which is built based on Hosepoints.
+ * An Instance of this class represents a Vehicle moving in a perticular direction in a perticular time
+ * and contains the average speed and average time period.
+ * @author Nolan.Tellis
+ *
+ */
+public class VehicleStats {
+
+    private static final int FRONT_AXLE_B = 1;
+    private static final int BACK_AXLE_B = 3;
+    private static final int FRONT_AXLE_A = 0;
+    private static final int BACK_AXLE_A = 1;
+<span class="fc" id="L28">    private static int totalNumberOfDays = 0;</span>
+    private VehicleStatsBuilder builderRef;
+<span class="fc" id="L30">    static float averageAxleLength = 2.5f;</span>
+<span class="fc" id="L31">    static int kmPerHourFactor = 3600;</span>
+    String day;
+    Direction direction;
+    int averageSpeed;
+    LocalTime averageTime;
+    List&lt;HoseDataPoint&gt; hoseDataPoints;
+/**
+ * 
+ * @param day String that represents the day when the vehicle passed over the Strip. Example : Day1,Day2 etc
+ * @param direction {@link Direction}
+ * @param hoseDataPoints {@link HoseDataPoint}
+ */
+<span class="fc" id="L43">    public VehicleStats(String day, Direction direction, List&lt;HoseDataPoint&gt; hoseDataPoints) {</span>
+<span class="fc" id="L44">	this.day = day;</span>
+<span class="fc" id="L45">	this.direction = direction;</span>
+<span class="fc" id="L46">	this.hoseDataPoints = hoseDataPoints;</span>
+<span class="fc" id="L47">	this.averageTime = getCalculatedAverageTime();</span>
+<span class="fc" id="L48">	this.averageSpeed = getCalculatedAverageSpeed();</span>
+
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * 
+     * @param builderRef A reference to the builder tat was used to build this VehicleStat Object. It contains meta information
+     * Example
+     * &lt;ul&gt;
+     * &lt;li&gt;Total Number of Days&lt;/li&gt;
+     * &lt;li&gt;Total Number of Vehicles&lt;/li&gt;
+     * &lt;li&gt;List of VehicleStats that was generated&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    public void setBuilderRef(VehicleStatsBuilder builderRef) {
+<span class="fc" id="L63">	this.builderRef = builderRef;</span>
+<span class="fc" id="L64">    }</span>
+/**
+ * 
+ * @return day when the vehicle passed on the road.
+ */
+    public String getDay() {
+<span class="fc" id="L70">	return day;</span>
+    }
+/**
+ * 
+ * @return {@link Direction} The Direction of Vehicle on the Road
+ */
+    public Direction getDirection() {
+<span class="fc" id="L77">	return direction;</span>
+    }
+
+    /**
+     * 
+     * @return average Speed of the Vehicle
+     */
+    public int getAverageSpeed() {
+<span class="fc" id="L85">	return averageSpeed;</span>
+    }
+
+    /**
+     * 
+     * @return averae time of the vehicle when it passed the HosePoints
+     */
+    public LocalTime getAverageTime() {
+<span class="fc" id="L93">	return averageTime;</span>
+    }
+
+    public List&lt;HoseDataPoint&gt; getHoseDataPoints() {
+<span class="fc" id="L97">	return hoseDataPoints;</span>
+    }
+
+    private LocalTime getCalculatedAverageTime() {
+
+<span class="fc" id="L102">	Iterator&lt;HoseDataPoint&gt; timeIterator = hoseDataPoints.iterator();</span>
+<span class="fc" id="L103">	Duration d = Duration.ZERO;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">	while (timeIterator.hasNext()) {</span>
+<span class="fc" id="L105">	    LocalTime t1 = timeIterator.next().getInstantTime();</span>
+<span class="fc" id="L106">	    LocalTime t2 = timeIterator.next().getInstantTime();</span>
+<span class="fc" id="L107">	    d = d.plus(Duration.between(t1, t2));</span>
+<span class="fc" id="L108">	}</span>
+<span class="fc" id="L109">	d = d.dividedBy(hoseDataPoints.size());</span>
+<span class="fc" id="L110">	return hoseDataPoints.get(0).getInstantTime().plus(d);</span>
+    }
+
+    private int getCalculatedAverageSpeed() {
+
+<span class="fc" id="L115">	long timeDifference = Long.MIN_VALUE;</span>
+<span class="fc" id="L116">	Duration duration = Duration.ZERO;</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">	if (hoseDataPoints.size() == 2) {</span>
+	    // Assuming average time by taking second axle
+<span class="fc" id="L119">	    duration = Duration.between(hoseDataPoints.get(FRONT_AXLE_A).getInstantTime(),</span>
+<span class="fc" id="L120">		    hoseDataPoints.get(BACK_AXLE_A).getInstantTime());</span>
+
+	} else {
+	    // Assuming average time by taking second axle for strip B
+<span class="fc" id="L124">	    duration = Duration.between(hoseDataPoints.get(FRONT_AXLE_B).getInstantTime(),</span>
+<span class="fc" id="L125">		    hoseDataPoints.get(BACK_AXLE_B).getInstantTime());</span>
+
+	}
+<span class="fc" id="L128">	timeDifference = duration.getNano() / 1000000;</span>
+<span class="fc" id="L129">	return (int) ((averageAxleLength / timeDifference) * kmPerHourFactor);</span>
+    }
+
+    /**
+     * 
+     * @return AM/PM for time which the vehicle passed over the road.
+     */
+    public String getAMPMInstant() {
+<span class="fc" id="L137">	return this.averageTime.format(DateTimeFormatter.ofPattern(&quot;a&quot;));</span>
+    }
+
+    public int getTotalNumberOfDays() {
+<span class="fc" id="L141">	return builderRef.getDayList().size();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>VehicleStatsReport.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">VehicleSurvey</a> &gt; <a href="index.source.html" class="el_package">com.vehiclesurvey.report</a> &gt; <span class="el_source">VehicleStatsReport.java</span></div><h1>VehicleStatsReport.java</h1><pre class="source lang-java linenums">package com.vehiclesurvey.report;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.OptionalDouble;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import com.vehiclesurvey.exception.InValidTimeIntervalException;
+import com.vehiclesurvey.model.Direction;
+import com.vehiclesurvey.model.VehicleStats;
+
+/**
+ * This is the Class which is used to Generate the report. 
+ * The Return types are general Maps or List which a User can use to control display of outputs.
+ * @author Nolan.Tellis
+ *
+ */
+public class VehicleStatsReport {
+
+    private static final int SECONDS_OF_DAY = 24 * 3600;
+    private static final int METER_FACTOR = 1000;
+    private List&lt;VehicleStats&gt; vehicleStats;
+
+    /**
+     * 
+     * @param vehicleStats This is a list of {@link VehicleStats} which is used for reporting.
+     */
+<span class="fc" id="L38">    public VehicleStatsReport(List&lt;VehicleStats&gt; vehicleStats) {</span>
+
+<span class="fc" id="L40">	this.vehicleStats = vehicleStats;</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * This method is used to get Vehicle Stats based on Morning or evening time.
+     * @param direction The Direction of Vehicles
+     * @param isAverageByDays Is the Report Averaged by total number of Days. If false Then The report Displays Statistics for each Day.
+     * @return Map&amp;lt;String,Map&amp;lt;String,Long&amp;gt;&amp;gt; or Map&amp;lt;String,Long&amp;gt; depending upon isAverageByDays flag 
+     */
+    public Map&lt;String, ?&gt; getVehicleCountByMorningEveningForDirection(Direction direction, boolean isAverageByDays) {
+<span class="fc" id="L50">	Predicate&lt;VehicleStats&gt; predicate = (vehicleStat) -&gt; vehicleStat.getDirection() == direction;</span>
+
+<span class="fc" id="L52">	Function&lt;VehicleStats, String&gt; topGroupByFunction = VehicleStats::getAMPMInstant;</span>
+
+<span class="fc" id="L54">	Function&lt;VehicleStats, String&gt; subGroupByFunction = VehicleStats::getDay;</span>
+
+<span class="fc" id="L56">	return getVehicleCountByPredicateAndGroupingFunction(predicate, topGroupByFunction, subGroupByFunction,</span>
+		isAverageByDays);
+
+    }
+
+    /**
+     * This method returns vehicle statistics based on time intervals by minutes.
+     * @param direction The Direction of Vehicles
+     * @param timeInterval A valid time interval. Example 20,30 or 40 minutes required to group by interval per hour. 
+     * @param isAverageByDays Is the Report Averaged by total number of Days. If false Then The report Displays Statistics for each Day.
+     * @return Map&amp;lt;String,Map&amp;lt;String,Long&amp;gt;&amp;gt; or Map&amp;lt;String,Long&amp;gt; depending upon isAverageByDays flag
+     * @throws InValidTimeIntervalException This exception is thrown for invalid intervals. Example intervals &amp;lt;=0
+     */
+    public Map&lt;String, ?&gt; getVehicleCountByMinuteDivisionForDirection(Direction direction, int timeInterval,
+	    boolean isAverageByDays) throws InValidTimeIntervalException {
+
+<span class="fc bfc" id="L72" title="All 2 branches covered.">	if (timeInterval &lt;= 0) {</span>
+<span class="fc" id="L73">	    throw new InValidTimeIntervalException(&quot;Invalid Time Interval&quot; + timeInterval);</span>
+	}
+
+<span class="fc" id="L76">	Predicate&lt;VehicleStats&gt; predicate = (vehicleStat) -&gt; vehicleStat.getDirection() == direction;</span>
+
+<span class="fc" id="L78">	Function&lt;VehicleStats, String&gt; topGroupByFunction = (VehicleStats e) -&gt; {</span>
+	    int startTimeInterval = (e.getAverageTime().getMinute() / timeInterval) * timeInterval;
+	    return &quot;Count of Vehicles between time range of &quot; + startTimeInterval + &quot; and &quot;
+		    + (startTimeInterval + timeInterval) + &quot; min&quot;;
+
+	};
+
+<span class="fc" id="L85">	Function&lt;VehicleStats, String&gt; subGroupByFunction = VehicleStats::getDay;</span>
+
+<span class="fc" id="L87">	return getVehicleCountByPredicateAndGroupingFunction(predicate, topGroupByFunction, subGroupByFunction,</span>
+		isAverageByDays);
+    }
+
+    /**
+     * This method returns vehicle count per hour.
+     * @param direction The Direction of Vehicles
+     * @param isAverageByDays Is the Report Averaged by total number of Days. If false Then The report Displays Statistics for each Day.
+     * @return Map&amp;lt;String,Map&amp;lt;String,Long&amp;gt;&amp;gt; or Map&amp;lt;String,Long&amp;gt; depending upon isAverageByDays flag 
+     */
+    public Map&lt;String, ?&gt; getVehicleCountByHourForDirection(Direction direction, boolean isAverageByDays) {
+
+<span class="fc" id="L99">	Predicate&lt;VehicleStats&gt; predicate = (vehicleStat) -&gt; vehicleStat.getDirection() == direction;</span>
+
+<span class="fc" id="L101">	Function&lt;VehicleStats, String&gt; topGroupByFunction = (VehicleStats e) -&gt; {</span>
+	    return &quot;Count of Vehicle at the hour &quot; + e.getAverageTime().getHour();
+	};
+
+<span class="fc" id="L105">	Function&lt;VehicleStats, String&gt; subGroupByFunction = VehicleStats::getDay;</span>
+
+<span class="fc" id="L107">	return getVehicleCountByPredicateAndGroupingFunction(predicate, topGroupByFunction, subGroupByFunction,</span>
+		isAverageByDays);
+    }
+
+    /**
+     * This method returns the Peak time averaged over all days for a perticular hour.
+     * @return Peak Vehicle count for a perticular hour averaged over total days
+     */
+    public List&lt;Entry&lt;String, Long&gt;&gt; getPeakVehicleTimeByHoursOverAverageDays() {
+
+<span class="fc" id="L117">	Function&lt;VehicleStats, Integer&gt; hourFunction = (vehicleStats) -&gt; {</span>
+	    return vehicleStats.getAverageTime().getHour();
+	};
+
+<span class="fc" id="L121">	Map&lt;Integer, Long&gt; dataMap = this.vehicleStats.stream()</span>
+<span class="fc" id="L122">		.collect(Collectors.groupingBy(hourFunction, Collectors.counting()));</span>
+
+<span class="fc" id="L124">	Map&lt;String, Long&gt; averageMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L125">	dataMap.entrySet().forEach((e) -&gt; {</span>
+	    averageMap.put(&quot;Peak Average Traffic at the &quot; + e.getKey() + &quot; Hour&quot;,
+		    e.getValue() / vehicleStats.get(0).getTotalNumberOfDays());
+	});
+
+<span class="fc" id="L130">	Long max = averageMap.entrySet().stream().max(Comparator.comparing(Map.Entry::getValue)).get().getValue();</span>
+
+<span class="fc" id="L132">	List&lt;Map.Entry&lt;String, Long&gt;&gt; listOfMax = averageMap.entrySet().stream()</span>
+<span class="fc" id="L133">		.filter(entry -&gt; entry.getValue() == max).collect(Collectors.toList());</span>
+
+<span class="fc" id="L135">	return listOfMax;</span>
+
+    }
+
+    /**
+     * 
+     * @return Map of data showing speed distribution averaged over total number of days.
+     */
+    public Map&lt;String, Long&gt; getAveragedSpeedDistribution() {
+
+<span class="fc" id="L145">	Function&lt;VehicleStats, Integer&gt; speedFunction = (vehicleStats) -&gt; {</span>
+	    return vehicleStats.getAverageSpeed();
+	};
+
+<span class="fc" id="L149">	Map&lt;Integer, Long&gt; dataMap = this.vehicleStats.stream()</span>
+<span class="fc" id="L150">		.collect(Collectors.groupingBy(speedFunction, Collectors.counting()));</span>
+
+<span class="fc" id="L152">	Map&lt;String, Long&gt; averageMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L153">	dataMap.entrySet().forEach((e) -&gt; {</span>
+	    averageMap.put(&quot;Count of Vehicle at &quot; + e.getKey() + &quot; Km/Hr&quot;,
+		    e.getValue() / vehicleStats.get(0).getTotalNumberOfDays());
+	});
+
+<span class="fc" id="L158">	return averageMap;</span>
+
+    }
+
+    /**
+     * 
+     * @param direction The Direction of Vehicles
+     * @param startperiod The start range time
+     * @param endPeriod The end range time.
+     * @return rough distance between vehicles
+     */
+    public String getRoughDistanceBetweenVehicleBetweenPeriod(Direction direction, LocalTime startperiod,
+	    LocalTime endPeriod) {
+
+<span class="fc" id="L172">	Predicate&lt;VehicleStats&gt; predicate = (VehicleStats v) -&gt; {</span>
+
+	    return v.getDirection() == direction &amp;&amp; v.getAverageTime().isAfter(startperiod)
+		    &amp;&amp; v.getAverageTime().isBefore(endPeriod);
+	};
+
+<span class="fc" id="L178">	VehicleStats previousVehicleStat = null;</span>
+
+<span class="fc" id="L180">	List&lt;VehicleStats&gt; filteredList = vehicleStats.stream().filter(predicate).collect(Collectors.toList());</span>
+
+<span class="fc" id="L182">	List&lt;VehiclePair&gt; vehiclePair = IntStream.range(1, filteredList.size())</span>
+<span class="fc" id="L183">		.mapToObj(i -&gt; new VehiclePair(filteredList.get(i - 1), filteredList.get(i)))</span>
+<span class="fc" id="L184">		.collect(Collectors.toList());</span>
+
+<span class="fc" id="L186">	List&lt;Integer&gt; distance = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">	for (VehiclePair p : vehiclePair) {</span>
+
+<span class="fc" id="L189">	    int firstVehicleDistance = (int) (p.v1.getAverageSpeed() * (float) p.v1.getAverageTime().toSecondOfDay()</span>
+		    / SECONDS_OF_DAY * METER_FACTOR);
+<span class="fc" id="L191">	    int secondVehicleDistance = (int) (p.v2.getAverageSpeed() * (float) p.v2.getAverageTime().toSecondOfDay()</span>
+		    / SECONDS_OF_DAY * METER_FACTOR);
+
+<span class="fc" id="L194">	    distance.add(Math.abs(firstVehicleDistance - secondVehicleDistance));</span>
+
+<span class="fc" id="L196">	}</span>
+
+<span class="fc" id="L198">	OptionalDouble doubleValue = distance.stream().mapToInt((i) -&gt; i).average();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">	return doubleValue.isPresent() ? doubleValue.getAsDouble() + &quot; meters&quot; : 0 + &quot; meters&quot;;</span>
+
+    }
+
+    private Map&lt;String, ?&gt; getVehicleCountByPredicateAndGroupingFunction(Predicate&lt;VehicleStats&gt; direction,
+	    Function&lt;VehicleStats, String&gt; topGroupBy, Function&lt;VehicleStats, String&gt; subGroupBy,
+	    boolean isAverageByDays) {
+
+<span class="fc bfc" id="L207" title="All 2 branches covered.">	if (!isAverageByDays) {</span>
+<span class="fc" id="L208">	    return this.vehicleStats.stream().filter(direction).collect(Collectors.groupingBy(topGroupBy,</span>
+<span class="fc" id="L209">		    LinkedHashMap::new, Collectors.groupingBy(subGroupBy, LinkedHashMap::new, Collectors.counting())));</span>
+	} else {
+
+<span class="fc" id="L212">	    Map&lt;String, Long&gt; data = this.vehicleStats.stream().filter(direction)</span>
+<span class="fc" id="L213">		    .collect(Collectors.groupingBy(topGroupBy, LinkedHashMap::new, Collectors.counting()));</span>
+
+<span class="fc" id="L215">	    Map&lt;String, Long&gt; resultData = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L216">	    data.entrySet().stream().forEach((Entry&lt;String, Long&gt; e) -&gt; {</span>
+		resultData.put(e.getKey(), (e.getValue() / vehicleStats.get(0).getTotalNumberOfDays()));
+
+	    });
+<span class="fc" id="L220">	    return resultData;</span>
+	}
+
+    }
+
+    class VehiclePair {
+
+<span class="fc" id="L227">	public VehiclePair(VehicleStats v1, VehicleStats v2) {</span>
+
+<span class="fc" id="L229">	    this.v1 = v1;</span>
+<span class="fc" id="L230">	    this.v2 = v2;</span>
+<span class="fc" id="L231">	}</span>
+
+	VehicleStats v1;
+	VehicleStats v2;
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

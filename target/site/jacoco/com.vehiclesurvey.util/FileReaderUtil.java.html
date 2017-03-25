@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FileReaderUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">VehicleSurvey</a> &gt; <a href="index.source.html" class="el_package">com.vehiclesurvey.util</a> &gt; <span class="el_source">FileReaderUtil.java</span></div><h1>FileReaderUtil.java</h1><pre class="source lang-java linenums">package com.vehiclesurvey.util;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+/**
+ * This is a utility class which deals with file related operations.
+ * @author Nolan.Tellis
+ *
+ */
+<span class="nc" id="L15">public class FileReaderUtil {</span>
+
+    /**
+     * Checks if a file exists or not.
+     * @param file A String file name.
+     * @return &lt;code&gt;true&lt;/code&gt; if file exists else &lt;code&gt;false&lt;/code&gt;
+     */
+    public static boolean exists(String file) {
+<span class="fc" id="L23">	Path path = Paths.get(file);</span>
+
+<span class="fc" id="L25">	return Files.exists(path);</span>
+    }
+
+    /**
+     * This method reads a file and returns a list of lines read from a file
+     * @param file File name with path
+     * @return List of Strings
+     * @throws IOException Throws exception if file does not exists
+     */
+    public static List&lt;String&gt; readFile(String file) throws IOException {
+<span class="fc" id="L35">	Path path = Paths.get(file);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">	if (!exists(file)) {</span>
+	    // Using console output as problem statement says not to use third
+	    // party Library
+<span class="fc" id="L39">	    System.out.println(&quot;File Does not Exist&quot;);</span>
+<span class="fc" id="L40">	    throw new IOException(&quot;File Not Found&quot;);</span>
+	}
+
+<span class="fc" id="L43">	List&lt;String&gt; dataPointList = new ArrayList&lt;String&gt;();</span>
+<span class="pc" id="L44">	try (Stream&lt;String&gt; lines = Files.lines(path)) {</span>
+	    // Read All data in list
+<span class="fc" id="L46">	    lines.forEach(dataPointList::add);</span>
+<span class="pc bpc" id="L47" title="6 of 8 branches missed.">	}</span>
+
+<span class="fc" id="L49">	return dataPointList;</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

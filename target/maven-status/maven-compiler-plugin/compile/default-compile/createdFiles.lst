@@ -1,0 +1,13 @@
+com\vehiclesurvey\util\FileReaderUtil.class
+com\vehiclesurvey\util\VehicleStatsBuilder$1.class
+com\vehiclesurvey\util\VehicleStatsBuilder.class
+com\vehiclesurvey\model\Direction.class
+com\vehiclesurvey\model\HoseDataPoint.class
+com\vehiclesurvey\util\VehicleStatsBuilder$STATE.class
+com\vehiclesurvey\model\HoseTag.class
+com\vehiclesurvey\exception\InvalidHoseDataPointException.class
+com\vehiclesurvey\report\VehicleStatsReport$VehiclePair.class
+com\vehiclesurvey\report\VehicleStatsReport.class
+com\vehiclesurvey\exception\InValidTimeIntervalException.class
+com\vehiclesurvey\model\VehicleStats.class
+com\vehiclesurvey\app\VehicleSurvey.class

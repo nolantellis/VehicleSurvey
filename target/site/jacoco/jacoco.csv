@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+VehicleSurvey,com.vehiclesurvey.report,VehicleStatsReport,0,276,0,8,0,54,0,12,0,8
+VehicleSurvey,com.vehiclesurvey.report,VehicleStatsReport.VehiclePair,0,12,0,0,0,4,0,1,0,1
+VehicleSurvey,com.vehiclesurvey.util,FileReaderUtil,33,51,6,4,1,11,5,3,1,2
+VehicleSurvey,com.vehiclesurvey.util,VehicleStatsBuilder.STATE,5,33,0,0,0,2,1,3,1,3
+VehicleSurvey,com.vehiclesurvey.util,VehicleStatsBuilder.new Object() {...},2,17,0,0,0,1,0,1,0,1
+VehicleSurvey,com.vehiclesurvey.util,VehicleStatsBuilder,0,198,2,21,0,40,2,19,0,9
+VehicleSurvey,com.vehiclesurvey.model,Direction,9,49,0,0,0,2,2,2,2,2
+VehicleSurvey,com.vehiclesurvey.model,HoseTag,0,38,0,0,0,2,0,4,0,4
+VehicleSurvey,com.vehiclesurvey.model,HoseDataPoint,0,45,0,4,0,10,0,6,0,4
+VehicleSurvey,com.vehiclesurvey.model,VehicleStats,0,152,0,4,0,37,0,14,0,12
+VehicleSurvey,com.vehiclesurvey.exception,InValidTimeIntervalException,0,6,0,0,0,3,0,1,0,1
+VehicleSurvey,com.vehiclesurvey.exception,InvalidHoseDataPointException,0,7,0,0,0,3,0,1,0,1
+VehicleSurvey,com.vehiclesurvey.app,VehicleSurvey,482,0,18,0,102,0,24,0,15,0

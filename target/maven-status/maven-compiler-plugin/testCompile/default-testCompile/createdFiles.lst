@@ -1,0 +1,6 @@
+com\vehiclesurvey\VehicleStatReportByTimeTest.class
+com\vehiclesurvey\VehicleStatTest.class
+com\vehiclesurvey\HoseDataPointTest.class
+com\vehiclesurvey\util\FileUtilTest.class
+com\vehiclesurvey\VehicleStatsReportTest.class
+com\vehiclesurvey\VehicleStatBuilderTest.class

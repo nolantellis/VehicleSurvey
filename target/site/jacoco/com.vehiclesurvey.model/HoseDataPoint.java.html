@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>HoseDataPoint.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">VehicleSurvey</a> &gt; <a href="index.source.html" class="el_package">com.vehiclesurvey.model</a> &gt; <span class="el_source">HoseDataPoint.java</span></div><h1>HoseDataPoint.java</h1><pre class="source lang-java linenums">package com.vehiclesurvey.model;
+
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+
+import com.vehiclesurvey.exception.InvalidHoseDataPointException;
+
+/**
+ * This Class is a Pojo that holds data points for a vehicle which has passed a
+ * hosepoint on the road.
+ * 
+ * @author Nolan.Tellis
+ *
+ */
+public class HoseDataPoint {
+<span class="fc" id="L17">    private static String hosePointExpression = &quot;[AB]\\d+&quot;;</span>
+    private HoseTag hoseTag;
+<span class="fc" id="L19">    private LocalTime instantTime = LocalTime.MIDNIGHT;</span>
+
+    /**
+     * This Constructor is used to generate a hosepoint from a String
+     * 
+     * Example :
+     * &lt;ul&gt;
+     * &lt;li&gt;A123455&lt;/li&gt;
+     * &lt;/ul&gt;
+     * 
+     * 
+     * @param hosePoint A String hosepoint. Example : B1233444
+     * @throws InvalidHoseDataPointException Exception is thrown if it is unable to parse the hosepoint using expression [AB]\d*
+     */
+<span class="fc" id="L33">    public HoseDataPoint(String hosePoint) throws InvalidHoseDataPointException {</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">	if (Objects.isNull(hosePoint) || !hosePoint.matches(hosePointExpression)) {</span>
+<span class="fc" id="L35">	    throw new InvalidHoseDataPointException(&quot;InValid HosePoint&quot;);</span>
+	}
+<span class="fc" id="L37">	hoseTag = HoseTag.valueOf(hosePoint.substring(0, 1));</span>
+<span class="fc" id="L38">	this.instantTime = this.instantTime.plus(Long.valueOf(hosePoint.substring(1)), ChronoUnit.MILLIS);</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * 
+     * @return {@link HoseTag} Example :  In Data point A1234 the value 'A' is a HoseTag. It is used to detect the direction of a vehicle
+     */
+    public HoseTag getHoseTag() {
+<span class="fc" id="L46">	return hoseTag;</span>
+    }
+
+    /**
+     * 
+     * @return {@link LocalTime} Its the time at which a vehicle passed over a given {@link HoseDataPoint}
+     */
+    public LocalTime getInstantTime() {
+<span class="fc" id="L54">	return instantTime;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>
