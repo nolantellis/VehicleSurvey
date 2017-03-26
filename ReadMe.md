@@ -13,11 +13,10 @@ I liked the Vehicle Survey problem because it has many aspects to be tested upon
 Design Approach
 ------------------
 * I divided the problem in 3 parts.
-<br>
 * Parsing the data file and creating a data structure for a single vehicle statistic.
 * For a List of Vehicle Stats run reports on the list, grouping by various categories.
 * Using test driven development for a sample of 4 to 5 data points, I created around 35 test cases which tests the reports and manual calculations to verify the same.
-<br>
+
 If it works for 4 sample data. The same will work for the large sample set provided in the problem.
 
 * I highly doubt I would be able to solve the problem if it was not for TDD type programming.
