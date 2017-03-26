@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.vehiclesurvey.VehicleStatReportByTimeTest
 -------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.546 sec - in com.vehiclesurvey.VehicleStatReportByTimeTest
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.449 sec - in com.vehiclesurvey.VehicleStatReportByTimeTest

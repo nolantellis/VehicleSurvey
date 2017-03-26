@@ -29,11 +29,11 @@ public class VehicleStats {
     private VehicleStatsBuilder builderRef;
 <span class="fc" id="L30">    static float averageAxleLength = 2.5f;</span>
 <span class="fc" id="L31">    static int kmPerHourFactor = 3600;</span>
-    String day;
-    Direction direction;
-    int averageSpeed;
-    LocalTime averageTime;
-    List&lt;HoseDataPoint&gt; hoseDataPoints;
+    private String day;
+    private Direction direction;
+    private int averageSpeed;
+    private LocalTime averageTime;
+    private List&lt;HoseDataPoint&gt; hoseDataPoints;
 /**
  * 
  * @param day String that represents the day when the vehicle passed over the Strip. Example : Day1,Day2 etc
