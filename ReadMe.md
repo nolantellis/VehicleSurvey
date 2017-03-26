@@ -43,7 +43,7 @@ Tools And Technology Used
 How to Run via JAVA
 -----------------
 ```sh
-* java -jar VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
+java -jar VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
 ```
 * From Project Directory : Vehicle Survey
 * java -jar target/VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
@@ -56,18 +56,24 @@ Run Via Maven
 
 Command
 ----------
-* mvn clean install
+```sh
+mvn clean install
+```
 * The above command will also run the program after all tests are passed.
 
 Test Coverage Reports
 ----------------------
-* For Test run 'mvn test'
+* For Test run 
+```sh
+mvn test
+```
 * After running 'mvn clean install'. An index.html file is generated in target/site/jacoco directory. You can view the coverage report in the same.
 
 Java API Docs for documentaion over classes and methods
 -------------
+```sh
  mvn javadoc:javadoc
-
+```
 ASSUMPTIONS
 ---------------------------
 * Grouping by Minutes is considered to be in the same group by the hour.
