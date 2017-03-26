@@ -42,8 +42,9 @@ Tools And Technology Used
 
 How to Run via JAVA
 -----------------
+```sh
 * java -jar VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
-
+```
 * From Project Directory : Vehicle Survey
 * java -jar target/VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
 
