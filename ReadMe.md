@@ -31,7 +31,7 @@ While processing each data point in the file, I used a state transaction flow fo
 
 Pattern in report
 * Every Report is grouped by Direction of vehicle and then grouped by function of the Vehicle Stat data structure.
-* So making use of API like predicate and Functions of functional interface the base structure of all reports were reuse able.
+* So making use of API like predicate and Functions of functional interface, the base structure of all reports were reuseable.
 
 
 Tools And Technology Used
@@ -42,7 +42,7 @@ Tools And Technology Used
 
 How to Run via JAVA
 -----------------
-* java -jar VehicleSurvey-1.0-SNAPSHOT.jar <File Name>
+* java -jar VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
 
 * From Project Directory : Vehicle Survey
 * java -jar target/VehicleSurvey-1.0-SNAPSHOT.jar src/test/resource/VehicleSurveySample.txt
@@ -51,7 +51,7 @@ How to Run via JAVA
 
 Run Via Maven
 ----------------
-* The above program also runs after the tests are executed with the sample file which was attached with the problem.
+* The above program also runs in the install phase and is executed with the sample file which was attached with the problem.
 
 Command
 ----------
